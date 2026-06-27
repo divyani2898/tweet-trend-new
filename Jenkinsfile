@@ -4,17 +4,17 @@ pipeline {
             label 'maven'
         }
     }
+    stage('Build') {
+    steps {
+        sh '''
+        export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+        export PATH=$JAVA_HOME/bin:$PATH
 
-    environment{
-        PATH="/opt/apache-maven-3.9.11/bin:$PATH"
-
+        java -version
+        mvn clean package
+        '''
     }
-
-    stages {
-        stage("build") {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
-    }
+}
+    
+    
 }
