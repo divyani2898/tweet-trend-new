@@ -20,8 +20,18 @@ pipeline {
                 export PATH=$JAVA_HOME/bin:$PATH
 
                 java -version
-                mvn clean package
+                mvn clean deploy -Dmaven.test.skip=true
+
                 '''
+            }
+        }
+
+
+        stage("test"){
+            steps{
+                echo "----------- unit test started ----------"
+                sh 'mvn surefire-report:report'
+                 echo "----------- unit test Complted ----------"
             }
         }
 
