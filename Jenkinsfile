@@ -7,6 +7,8 @@ pipeline {
 
     environment{
         PATH="/opt/apache-maven-3.9.11/bin:$PATH"
+        IMAGE_NAME = "divyani2898/tweet-app"
+        IMAGE_TAG = "${BUILD_NUMBER}"
 
     }
 
@@ -34,18 +36,34 @@ pipeline {
                  echo "----------- unit test Complted ----------"
             }
         }
-
-        stage('SonarQube analysis') {
-            environment {
-                scannerHome = tool 'valaxy-sonar-scanner'
-            }
-
+               stage('Build Docker Image') {
             steps {
-                withSonarQubeEnv('valaxy-sonarqube-server') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+
+                    sh '''
+                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    docker push $IMAGE_NAME:$IMAGE_TAG
+                    
+                    '''
                 }
             }
         }
+
+
+
+        
+
+        
 
     }
 }
