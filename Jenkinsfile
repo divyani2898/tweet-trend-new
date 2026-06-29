@@ -59,13 +59,14 @@ pipeline {
             }
         }
 
-        stage("deploy"){
-            steps{
-                script{
-                    sh './deploy.sh'
-                }
-            }
-        }
+        stage('Deploy') {
+    steps {
+        sh '''
+            chmod +x deploy.sh
+            ./deploy.sh
+        '''
+    }
+}
 
 
 
