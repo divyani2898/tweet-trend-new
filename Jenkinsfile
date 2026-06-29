@@ -8,7 +8,7 @@ pipeline {
     environment{
         PATH="/opt/apache-maven-3.9.11/bin:$PATH"
         IMAGE_NAME = "divyani2898/tweet-app"
-        IMAGE_TAG = 2.1.2
+        IMAGE_TAG = "2.1.2"
 
     }
 
